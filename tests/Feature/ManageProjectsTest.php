@@ -17,6 +17,8 @@ class ProjectsTest extends TestCase
         $attributes = factory('App\Project')->raw();
 
         $this->post('/projects', $attributes)->assertRedirect('login');
+
+        $this->get('/projects/create')->assertRedirect('login');
     }
 
     /** @test */
@@ -40,6 +42,8 @@ class ProjectsTest extends TestCase
         $this->withoutExceptionHandling();
 
         $this->actingAs(factory('App\User')->create());
+
+        $this->get('/projects/create')->assertOk();
 
         $attributes = factory('App\Project')->raw();
 

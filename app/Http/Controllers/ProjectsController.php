@@ -9,7 +9,7 @@ class ProjectsController extends Controller
 {
     public function index()
     {
-        $projects = auth()->user()->project;
+        $projects = auth()->user()->projects;
 
         return view('projects.index', compact('projects'));
     }
@@ -21,6 +21,11 @@ class ProjectsController extends Controller
         }
 
         return view('projects.show', compact('project'));
+    }
+
+    public function create()
+    {
+        return view('projects.create');
     }
 
     public function store()
