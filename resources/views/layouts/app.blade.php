@@ -25,7 +25,7 @@
             <div class="container mx-auto">
                 <div class="flex justify-between item-center py-4">
                     <a href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
+                        <img src="/images/logo.svg" />
                     </a>
                     <div>
                         <!-- Left Side Of Navbar -->

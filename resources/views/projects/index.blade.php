@@ -2,20 +2,21 @@
 
 
 @section('content')
-  <div class="flex item-center mb-4">
-    <h1 class="mr-auto">Birdboard</h1>
-    <a href="/projects/create">New Project</a>
-  </div>
+  <header class="flex item-end mb-3">
+    <div class="flex justify-between w-full items-center">
+      <h2 class="text-grey text-sm font-normal">My Projects</h2>
 
-  <div class="flex">
+      <a class="button" href="/projects/create">New Project</a>
+    </div>
+  </header>
+
+  <main class="lg:flex lg:flex-wrap -mx-3">
     @forelse($projects as $project)
-      <div class="bg-white mr-4 p-5 shadow w-1/3" style="height: 200px;">
-        <h3 class="text-xl font-normal py-4">{{ str_limit($project->title, 10) }}</h3>
-
-        <div class="text-grey-dark">{{ str_limit($project->description, 50) }}</div>
+      <div class="lg:w-1/3  px-3 pb-6">
+        @include ('projects.card')
       </div>
     @empty
       <div>No Projects yet.</div>
     @endforelse
-  </div>
+  </main>
 @endsection
