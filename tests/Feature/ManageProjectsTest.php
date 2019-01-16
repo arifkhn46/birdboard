@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Project;
 
 class ProjectsTest extends TestCase
 {
@@ -45,9 +46,18 @@ class ProjectsTest extends TestCase
 
         $this->get('/projects/create')->assertOk();
 
-        $attributes = factory('App\Project')->raw();
+        $attributes = [
+            'title' => $this->faker->sentence(),
+            'description' => $this->faker->paragraph(),
+        ];
 
-        $this->post('/projects', $attributes)->assertRedirect('/projects');
+        $response = $this->post('/projects', $attributes);
+
+        $response->assertRedirect(Project::where($attributes)->first()->path());
+
+        $this->assertDatabaseHas('projects', $attributes);
+
+        $this->get('/projects')->assertSee(str_limit($attributes['title'], 10));
     }
 
     /** @test */
