@@ -15,11 +15,15 @@ class ProjectsTest extends TestCase
     /** @test */
     public function guests_can_not_create_porjects()
     {
-        $attributes = factory('App\Project')->raw();
+        $project = factory('App\Project')->create();
 
-        $this->post('/projects', $attributes)->assertRedirect('login');
+        $this->post('/projects', $project->toArray())->assertRedirect('login');
 
         $this->get('/projects/create')->assertRedirect('login');
+
+        $this->get($project->path())->assertRedirect('login');
+
+        $this->get($project->path() . '/edit')->assertRedirect('login');
     }
 
     /** @test */
@@ -74,11 +78,17 @@ class ProjectsTest extends TestCase
 
         $project = factory('App\Project')->create(['owner_id' => auth()->id()]);
 
-        $this->patch($project->path(), [
+        $attributes = [
             'notes' => 'Changed',
-        ])->assertRedirect($project->path());
+            'title' => 'Changed',
+            'description' => "Some Description here",
+        ];
 
-        $this->assertDatabaseHas('projects', ['notes' => 'Changed']);
+        $this->patch($project->path(), $attributes)->assertRedirect($project->path());
+
+        $this->get($project->path(). '/edit')->assertOk();
+
+        $this->assertDatabaseHas('projects', $attributes);
     }
 
     /** @test */
