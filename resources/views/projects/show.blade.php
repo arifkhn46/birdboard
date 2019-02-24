@@ -40,7 +40,7 @@
         <div>
             <h2 class="text-grey text-lg font-normal mb-3">General Notes</h2>
 
-            <form action="POST" action="{{ $project->path() }}">
+            <form method="POST" action="{{ $project->path() }}">
               @csrf
               @method('PATCH')
               <textarea
