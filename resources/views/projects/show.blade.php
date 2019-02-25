@@ -40,7 +40,7 @@
         <div>
             <h2 class="text-grey text-lg font-normal mb-3">General Notes</h2>
 
-            <form action="POST" action="{{ $project->path() }}">
+            <form method="POST" action="{{ $project->path() }}">
               @csrf
               @method('PATCH')
               <textarea
@@ -57,6 +57,8 @@
       <div class="lg:w-1/3 px-3 py">
         <div class="mb-8"></div>
         @include ('projects.card')
+
+        @include('projects.activity.card')
       </div>
     </div>
   </main>
