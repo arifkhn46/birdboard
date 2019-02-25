@@ -57,6 +57,8 @@
       <div class="lg:w-1/3 px-3 py">
         <div class="mb-8"></div>
         @include ('projects.card')
+
+        @include('projects.activity.card')
       </div>
     </div>
   </main>
