@@ -30,23 +30,31 @@ trait RecordActivity
 
   public function activity()
   {
-      return $this->morphMany(Activity::class, 'subject')->latest();
+    return $this->morphMany(Activity::class, 'subject')->latest();
   }
 
   public function recordActivty($description)
-    {
-        $this->activity()->create([
-            'description' => $description,
-            'changes' => $this->activityChanges(),
-            'project_id' => class_basename($this) == 'Project' ? $this->id : $this->project_id,
-        ]);
-    }
+  {
+    $this->activity()->create([
+      'user_id' => ($this->project ?? $this)->owner->id,
+      'description' => $description,
+      'changes' => $this->activityChanges(),
+      'project_id' => class_basename($this) == 'Project' ? $this->id : $this->project_id,
+    ]);
+  }
 
-    public function activityChanges()
-    {
-        return $this->wasChanged() ? [
-            'before' => array_diff($this->getOriginal(), $this->getAttributes()),
-            'after' => $this->getChanges(),
-        ] : null;
+  public function activityChanges()
+  {
+    if ($this->wasChanged()) {
+        return [
+            'before' => array_except(
+                array_diff($this->getOriginal(), $this->getAttributes()), 'updated_at'
+            ),
+            'after' => array_except(
+                $this->getChanges(), 'updated_at'
+            )
+        ];
     }
+  }
 }
+
