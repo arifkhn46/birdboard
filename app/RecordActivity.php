@@ -6,12 +6,26 @@ trait RecordActivity
 {
   public static function bootRecordActivity()
   {
-    $recordableEvents = ['created', 'updated', 'deleted'];
-    foreach ($recordableEvents as $event) {
+
+
+    foreach (self::recordableEvents() as $event) {
       static::$event(function ($model) use ($event) {
-        $model->recordActivty($event);
+        $model->recordActivty($model->activityDescription($event));
       });
     }
+  }
+
+  protected function activityDescription($description)
+  {
+    return $description = "{$description}_" . strtolower(class_basename($this));
+  }
+
+  protected static function recordableEvents()
+  {
+    if (isset(static::$recordableEvents)) {
+      return static::$recordableEvents;
+    }
+    return ['created', 'updated', 'deleted'];
   }
 
   public function activity()
