@@ -24,7 +24,7 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function only_the_owner_of_the_project_may_update_a_task()
     {
-        $this->singIn();
+        $this->signIn();
 
         $project = ProjectFactory::withTasks(1)->create();
 
@@ -37,7 +37,7 @@ class ProjectTasksTest extends TestCase
     /** @test */
     public function only_the_owner_of_a_project_may_add_tasks()
     {
-        $this->singIn();
+        $this->signIn();
 
         $project = factory(Project::class)->create();
 

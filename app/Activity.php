@@ -17,7 +17,7 @@ class Activity extends Model
         return $this->morphTo();
     }
 
-    public function owner()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

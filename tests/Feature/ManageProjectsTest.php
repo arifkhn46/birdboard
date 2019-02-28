@@ -46,7 +46,7 @@ class ProjectsTest extends TestCase
     public function a_user_can_create_a_project()
     {
 
-        $this->singIn();
+        $this->signIn();
 
         $this->get('/projects/create')->assertOk();
 
@@ -90,6 +90,33 @@ class ProjectsTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_delete_a_project()
+    {
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner);
+
+        $this->delete($project->path())
+            ->assertRedirect('/projects');
+
+        $this->assertDatabaseMissing('projects', $project->only('id'));
+    }
+
+    /** @test */
+    public function unauthorized_cannot_delete_a_project()
+    {
+        $project = ProjectFactory::create();
+
+        $this->delete($project->path())
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this->delete($project->path())
+            ->assertStatus(403);
+    }
+
+    /** @test */
     public function a_user_can_view_a_project()
     {
         $project = ProjectFactory::create();
@@ -124,7 +151,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_title()
     {
-        $this->singIn();
+        $this->signIn();
 
         $attributes = factory('App\Project')->raw(['title' => '']);
 
@@ -134,7 +161,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_description()
     {
-        $this->singIn();
+        $this->signIn();
 
         $attributes = factory('App\Project')->raw(['description' => '']);
 
