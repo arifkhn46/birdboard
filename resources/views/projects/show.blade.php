@@ -8,7 +8,12 @@
           <a href="/projects" class="text-grey text-sm font-normal no-underline">My Projects</a> / {{ $project->title }}
         </h2>
 
-        <a class="button" href="{{ $project->path() . '/edit' }}">Edit Project</a>
+        <div>
+          @foreach($project->members as $member)
+            <img src="https://gravatar.com/avatar/{{ md5($member->email) }}?s=60" alt="{{ $member->name }}'s avatar'">
+          @endforeach
+          <a class="button" href="{{ $project->path() . '/edit' }}">Edit Project</a>
+        </div>
       </div>
   </header>
 
