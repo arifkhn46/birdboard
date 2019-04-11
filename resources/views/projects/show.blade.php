@@ -8,13 +8,21 @@
           <a href="/projects" class="text-grey text-sm font-normal no-underline">My Projects</a> / {{ $project->title }}
         </h2>
 
-        <div class="flex item-center">
-          @foreach($project->members as $member)
-            <img src="{{ gravatar_url($member->email) }}" alt="{{ $member->name }}'s avatar'" class="rounded-full w-8 mr-2">
+        <div class="flex items-center">
+          @foreach ($project->members as $member)
+              <img
+                  src="{{ gravatar_url($member->email) }}"
+                  alt="{{ $member->name }}'s avatar"
+                  class="rounded-full w-8 mr-2">
           @endforeach
-          <img src="{{ gravatar_url($project->owner->email) }}" alt="{{ $project->owner->name }}'s avatar'" class="rounded-full w-8 mr-2">
-          <a class="button ml-4" href="{{ $project->path() . '/edit' }}">Edit Project</a>
-        </div>
+
+          <img
+              src="{{ gravatar_url($project->owner->email) }}"
+              alt="{{ $project->owner->name }}'s avatar"
+              class="rounded-full w-8 mr-2">
+
+          <a href="{{ $project->path().'/edit' }}" class="button ml-4">Edit Project</a>
+      </div>
       </div>
   </header>
 
@@ -60,11 +68,22 @@
             </form>
         </div>
       </div>
-      <div class="lg:w-1/3 px-3 py">
-        <div class="mb-8"></div>
+      <div class="lg:w-1/3 px-3 lg:py-8">
         @include ('projects.card')
-
         @include('projects.activity.card')
+        <div class="card flex flex-col">
+          <h3 class="text-xl font-normal py-4 -ml-5 mb-3 border-l-4 border-blue-light pl-4">
+            Invite User
+          </h3>
+          <form method="POST" action="{{ $project->path() . '/invitations' }}">
+            @csrf
+            <div class="mb-3">
+              <input type="text" name="email" class="border border-grey-light rounded w-full py-2 px-3" placeholder="Email address" />
+            </div>
+            <button type="submit" class="button">Invite</button>
+          </form>
+          @include('errors', ['bag' => 'invitations'])
+        </div>
       </div>
     </div>
   </main>
