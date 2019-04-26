@@ -48,12 +48,12 @@
 
 
 .button {
-  @apply .bg-blue .text-white .no-underline .rounded-lg .text-sm .py-2 .px-5;
+  @apply .bg-button .text-white .no-underline .rounded-lg .text-sm .py-2 .px-5;
   box-shadow: 0 2px 7px #b0eaff;
 }
 
 .card {
-  @apply .bg-white .rounded-lg .p-5 .shadow ;
+  @apply .bg-card .rounded-lg .p-5 .shadow ;
 }
 
 /**
@@ -80,3 +80,9 @@
  * @import "utilities/background-patterns";
  * @import "utilities/skew-transforms";
  */
+ :root {
+   --page-background-color: #F5F6F9;
+   --button-background-color: blue;
+   --card-background-color: #47cdff;
+   --nav-background-color: red;
+ }
