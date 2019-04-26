@@ -50,21 +50,10 @@ class ProjectsTest extends TestCase
 
         $this->get('/projects/create')->assertOk();
 
-        $attributes = [
-            'title' => $this->faker->sentence(),
-            'description' => $this->faker->sentence(),
-            'notes' => 'Project notes here',
-        ];
-
-        $response = $this->post('/projects', $attributes);
-
-        $project = Project::where($attributes)->first();
-
-        $response->assertRedirect($project->path());
-
-        $this->get($project->path())
+        $this->followingRedirects()
+            ->post('/projects', $attributes = factory(Project::class)->raw())
             ->assertSee(str_limit($attributes['title'], 10))
-            ->assertSee($attributes['description'])
+            ->assertSee(str_limit($attributes['description'], 100))
             ->assertSee($attributes['notes']);
     }
 
@@ -113,17 +102,21 @@ class ProjectsTest extends TestCase
             ->assertSee(str_limit($project->title, 10));
     }
     /** @test */
-    public function unauthorized_cannot_delete_a_project()
+    public function unauthorized_user_cannot_delete_a_project()
     {
         $project = ProjectFactory::create();
 
         $this->delete($project->path())
             ->assertRedirect('/login');
 
-        $this->signIn();
+        $user = $this->signIn();
 
         $this->delete($project->path())
-            ->assertStatus(403);
+             ->assertStatus(403);
+
+        $project->invite($user);
+
+        $this->actingAs($user)->delete($project->path())->assertStatus(403);
     }
 
     /** @test */
